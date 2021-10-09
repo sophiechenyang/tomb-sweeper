@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -30,11 +31,12 @@ public class GameView extends Parent{
 	int columns = GameModel.getColumns();
 	int tileSize = GameModel.getTileSize();
 	Text gameScore = new Text("0");
+	Text jewelScore = new Text("0");
 	Pane pane = new Pane();
 	Image pharaohImg = new Image("file:img/pharaoh.png");
 	ImageView pharaohView = new ImageView(pharaohImg);
 	private ArrayList<BeetleView> beetleViewList = new ArrayList<BeetleView>();
-	public Button startButton = new Button("Restart");
+	public Button resetButton = new Button("Restart");
 	
 	public GameView() {
 		BorderPane root = new BorderPane();
@@ -70,7 +72,6 @@ public class GameView extends Parent{
 	}
 
 	public void updateScore (GameModel gameModel) {
-		System.out.println(gameModel.getGamePoints());
 		gameScore.setText(Integer.toString(gameModel.getGamePoints())); ;
 	}
 	
@@ -106,8 +107,18 @@ public class GameView extends Parent{
 		VBox middleContainer = new VBox();
 
 		Text testText = new Text("Game is Started");
+		Group scores = new Group ();
+		scores.getChildren().addAll(gameScore, jewelScore);
 		
-		middleContainer.getChildren().addAll(testText, startButton, pane);
+		
+		BorderPane gameDisplay = new BorderPane();
+		gameDisplay.setMinSize(200, 60);
+		gameDisplay.setLeft(jewelScore);
+		gameDisplay.setCenter(gameScore);
+		gameDisplay.setRight(resetButton);
+		
+		
+		middleContainer.getChildren().addAll(gameDisplay,pane);
 		return middleContainer;
 	}
 	
@@ -123,7 +134,7 @@ public class GameView extends Parent{
 		fireView.setPreserveRatio(true);
 		
 		leftPaneView.setFitWidth(400);
-		leftPaneView.setFitHeight(360);
+		leftPaneView.setFitHeight(460);
 		
 		leftcontainer.getChildren().addAll(leftPaneView, fireView);
 		return leftcontainer;
@@ -138,7 +149,7 @@ public class GameView extends Parent{
 		
 		
 		rightPaneView.setFitWidth(400);
-		rightPaneView.setFitHeight(360);
+		rightPaneView.setFitHeight(460);
 		
 		rightcontainer.getChildren().add(rightPaneView);
 		return rightcontainer;
@@ -157,7 +168,7 @@ public class GameView extends Parent{
 		Image bottomPaneImg = new Image("file:img/bottomPane.png");
 		ImageView bottomPaneView = new ImageView(bottomPaneImg);
 		bottomPaneView.setFitWidth(1160);
-		bottomPaneView.setFitHeight(140);
+		bottomPaneView.setFitHeight(100);
 		
 		bottomcontainer.getChildren().add(bottomPaneView);
 		return bottomcontainer;
@@ -180,11 +191,23 @@ public class GameView extends Parent{
 	
 	public void reset() {
 		pane.getChildren().clear();
+		pharaohView.setImage(pharaohImg);
 		pane.getChildren().add(pharaohView);
+		gameScore.setText("0");
+		jewelScore.setText("0");
 	}
 	
-	public void clickStartButton(Button button, EventHandler<MouseEvent> startGame) {
+	public void clickResetButton(Button button, EventHandler<MouseEvent> startGame) {
 		button.setOnMouseClicked(startGame);
 	}
+	
+	public void setKeyPressHandler(EventHandler<KeyEvent> activateAmulet) {
+		this.setOnKeyPressed(activateAmulet);
+	}
+	
+	public void setKeyReleaseHandler(EventHandler<KeyEvent> deactivateAmulet) {
+		this.setOnKeyReleased(deactivateAmulet);
+	}
+
 
 }

@@ -6,7 +6,7 @@ import controller.GameController;
 import javafx.scene.Parent;
 
 public class GameModel extends Parent {
-	private static final int ROWS = 9;
+	private static final int ROWS = 10;
 	private static final int COLUMNS = 9;
 	private static final int TILE_SIZE = 40;
 	private int gamePoints = 0;
@@ -17,6 +17,7 @@ public class GameModel extends Parent {
 	private boolean gameOver = false;
 	private boolean gameActive = false;
 	private ArrayList<BeetleModel> beetleList = new ArrayList<BeetleModel>();
+	private boolean amuletActivated = false; 
 	
 	public BeetleModel createBeatle() {
 		BeetleModel beetle = new BeetleModel(generateRand(), generateRand());
@@ -112,6 +113,14 @@ public class GameModel extends Parent {
 
 	public void setGameActive(boolean gameActive) {
 		this.gameActive = gameActive;
+	}
+
+	public boolean isAmuletActivated() {
+		return amuletActivated;
+	}
+
+	public void setAmuletActivated(boolean amuletActivated) {
+		this.amuletActivated = amuletActivated;
 	}
 
 }

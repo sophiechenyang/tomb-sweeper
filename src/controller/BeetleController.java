@@ -33,6 +33,7 @@ public class BeetleController {
 				
 				if (beetleModel.isDead())
 					return;
+				
 				killBeetle();
 				
 			} else if (e.getButton() == MouseButton.SECONDARY){
@@ -45,8 +46,13 @@ public class BeetleController {
 
 		@Override
 		public void handle(MouseEvent e) {
-			beetleView.stopBeetle();
-			gameController.setGameOver();
+			
+			
+			if (gameModel.isAmuletActivated() == false) {
+				beetleView.stopBeetle();
+				gameController.setGameOver();
+			}
+
 			//System.out.println(e);
 			
 		}
@@ -54,11 +60,13 @@ public class BeetleController {
 	
 	private void killBeetle() {
 		//beetleView.setImage(null);
-		beetleView.fadeBeetle(this.beetleView);
-		beetleModel.setDead(true);
-		gameModel.removeFromBeetleList(beetleModel);
-		gameController.updateBeetleScore();
 		
+		if (gameModel.isGameActive()) {
+			beetleView.fadeBeetle(this.beetleView);
+			beetleModel.setDead(true);
+			gameModel.removeFromBeetleList(beetleModel);
+			gameController.updateBeetleScore();
+		}
 	}
 	
 

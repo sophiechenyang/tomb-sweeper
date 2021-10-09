@@ -16,7 +16,6 @@ public class TreasureView extends ImageView {
 	private int imageSize = 30;
 	private int currentTreasureX;
 	private int currentTreasureY;
-	
 
 	int tileSize = GameModel.getTileSize();
 	int offset = ( tileSize - imageSize ) / 2;
@@ -45,11 +44,13 @@ public class TreasureView extends ImageView {
 	
 	public void collectTreasure() {
 		
+		int newX = (GameModel.getColumns() * tileSize) / 2;
+		
 		TranslateTransition moveTreasure = new TranslateTransition(Duration.millis(500), this);
 		moveTreasure.setFromY(currentTreasureY);
 		moveTreasure.setToY(0);
 		moveTreasure.setFromX(currentTreasureX);
-		moveTreasure.setToX(0);
+		moveTreasure.setToX(newX);
 		moveTreasure.setCycleCount(1);
 		
 		FadeTransition fadeOut = new FadeTransition(Duration.millis(500), this);
