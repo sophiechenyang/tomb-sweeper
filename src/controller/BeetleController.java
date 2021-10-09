@@ -19,11 +19,12 @@ public class BeetleController {
 		this.beetleModel = beetleModel;
 		this.gameModel = gameModel;
 		this.gameController = gameController;
-		this.beetleView.setPlayerHandler(new SquashBeetle());
+		this.beetleView.setPlayerHandler(new clickBeetle());
+		this.beetleView.setHoverHandler(new hoverBeetle());
 
 	}
 
-	class SquashBeetle implements EventHandler<MouseEvent> {
+	class clickBeetle implements EventHandler<MouseEvent> {
 
 		@Override
 		public void handle(MouseEvent e) {
@@ -34,13 +35,20 @@ public class BeetleController {
 					return;
 				killBeetle();
 				
-				int randomX = gameModel.generateRand();
-				int randomY = gameModel.generateRand();
-				
-				gameController.createBeetle(randomX, randomY);
 			} else if (e.getButton() == MouseButton.SECONDARY){
 				beetleView.stopBeetle();
 			}
+		}
+	}
+	
+	class hoverBeetle implements EventHandler<MouseEvent> {
+
+		@Override
+		public void handle(MouseEvent e) {
+			beetleView.stopBeetle();
+			gameController.setGameOver();
+			//System.out.println(e);
+			
 		}
 	}
 	
@@ -48,9 +56,9 @@ public class BeetleController {
 		//beetleView.setImage(null);
 		beetleView.fadeBeetle(this.beetleView);
 		beetleModel.setDead(true);
-		gameModel.decreaseNumOfBeetles(); 
-		System.out.println("number of beetles count is: "+gameModel.getNumOfBeetles());
+		gameModel.removeFromBeetleList(beetleModel);
 		gameController.updateBeetleScore();
+		
 	}
 	
 

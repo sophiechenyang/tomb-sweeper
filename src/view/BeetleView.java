@@ -1,5 +1,7 @@
 package view;
 
+import java.util.ArrayList;
+
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
 import javafx.animation.RotateTransition;
@@ -12,6 +14,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.util.Duration;
 import model.BeetleModel;
+import model.GameModel;
 
 public class BeetleView extends ImageView {
 	private Image beetleImage = new Image("file:img/beetle.png");
@@ -46,9 +49,9 @@ public class BeetleView extends ImageView {
 
 		setTranslateX(currentBeetleX);
 		setTranslateY(currentBeetleY);
+		
 
 		animateBeetle(currentBeetleY, increment);
-
 	}
 	
 	private void animateBeetle(int currentBeetleY, int increment) {
@@ -73,7 +76,10 @@ public class BeetleView extends ImageView {
 		rotateTransition2.setAutoReverse(true);
 
 		sequentialOngoing.setCycleCount(Timeline.INDEFINITE);
+		
 		sequentialTransition.play();
+		
+
 	}
 	
 	public void stopBeetle() {
@@ -91,6 +97,10 @@ public class BeetleView extends ImageView {
 
 	public void setPlayerHandler(EventHandler<MouseEvent> listenForClick) {
 		this.setOnMouseClicked(listenForClick);
+	}
+	
+	public void setHoverHandler(EventHandler<MouseEvent> checkForHover) {
+		this.setOnMouseEntered(checkForHover);
 	}
 
 	public void moveX(int x) {

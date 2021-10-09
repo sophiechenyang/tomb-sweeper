@@ -22,7 +22,9 @@ public class TileController {
 	
 	class detectClick implements EventHandler<MouseEvent> {
 		@Override
-		public void handle(MouseEvent e) {
+		public void handle(MouseEvent e) {		
+			if (!gameModel.isGameActive())
+				gameController.startGame();
 			
 			if (tileModel.isHasTreasure() == true) {
 				gameController.createTreasure(tileModel.getX(), tileModel.getY());
@@ -31,9 +33,14 @@ public class TileController {
 			tileView.setImage(null);
 			gameModel.increaseTileOpenCount();	
 			
+			System.out.println("Tiles opened: " + gameModel.getTileCount());
+			System.out.println("Total tiles: " + gameModel.getNumberOfTiles());
+			
 			if (gameModel.getTileCount() == gameModel.getNumberOfTiles()) {
 				gameController.setGameWon();
 			}
+			
+
 
 		}
 	}

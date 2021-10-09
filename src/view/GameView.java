@@ -1,5 +1,8 @@
 package view;
 
+import java.util.ArrayList;
+
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -7,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -29,13 +33,15 @@ public class GameView extends Parent{
 	Pane pane = new Pane();
 	Image pharaohImg = new Image("file:img/pharaoh.png");
 	ImageView pharaohView = new ImageView(pharaohImg);
+	private ArrayList<BeetleView> beetleViewList = new ArrayList<BeetleView>();
+	public Button startButton = new Button("Restart");
 	
 	public GameView() {
 		BorderPane root = new BorderPane();
 		
 		setBackground(pane);
 		root.setTop(createHeader());
-		root.setCenter(pane);
+		root.setCenter(createGamePane());
 		root.setLeft(createLeftPanel());
 		root.setBottom(createBottomPane());
 		root.setRight(createRightPanel());
@@ -50,9 +56,10 @@ public class GameView extends Parent{
 		return tileView;	
 	}
 	
-	public BeetleView createBeatle(BeetleModel beetlemodel) {
+	public BeetleView createBeatle(BeetleModel beetlemodel, GameModel gameModel) {
 		BeetleView beetleView = new BeetleView(beetlemodel);
 		pane.getChildren().add(beetleView);
+		beetleViewList.add(beetleView);
 		return beetleView;
 	}
 	
@@ -95,22 +102,34 @@ public class GameView extends Parent{
 		
 	}
 	
-	// Instructions panel on the left
-	public VBox createLeftPanel() {
-		VBox leftcontainer = new VBox();
+	public VBox createGamePane() {
+		VBox middleContainer = new VBox();
+
+		Text testText = new Text("Game is Started");
+		
+		middleContainer.getChildren().addAll(testText, startButton, pane);
+		return middleContainer;
+	}
+	
+	public StackPane createLeftPanel() {
+		StackPane leftcontainer = new StackPane();
 				
 		Image leftPaneImg = new Image("file:img/leftPane.png");
 		ImageView leftPaneView = new ImageView(leftPaneImg);
 		
+		Image fire = new Image("file:img/fire.gif");
+		ImageView fireView = new ImageView(fire);
+		fireView.setFitWidth(70);
+		fireView.setPreserveRatio(true);
 		
 		leftPaneView.setFitWidth(400);
-		leftPaneView.setFitHeight(400);
+		leftPaneView.setFitHeight(360);
 		
-		leftcontainer.getChildren().add(leftPaneView);
+		leftcontainer.getChildren().addAll(leftPaneView, fireView);
 		return leftcontainer;
 	}
 	
-	// Instructions panel on the right
+
 	public VBox createRightPanel() {
 		VBox rightcontainer = new VBox();
 				
@@ -119,7 +138,7 @@ public class GameView extends Parent{
 		
 		
 		rightPaneView.setFitWidth(400);
-		rightPaneView.setFitHeight(400);
+		rightPaneView.setFitHeight(360);
 		
 		rightcontainer.getChildren().add(rightPaneView);
 		return rightcontainer;
@@ -127,7 +146,7 @@ public class GameView extends Parent{
 	
 	void setBackground(Pane pane) {
 		pharaohView.setFitWidth(360);
-		pharaohView.setFitHeight(400);
+		pharaohView.setFitHeight(360);
 		pane.getChildren().add(pharaohView);
 
 	}
@@ -148,8 +167,24 @@ public class GameView extends Parent{
 		Image winImg = new Image("file:img/harry.png");
 		ImageView winView = new ImageView(winImg);
 		// Button playAgain = new Button("Play Again");
-		
+		pane.getChildren().clear();
 		pane.getChildren().addAll(winView);
+	}
+	
+	public void setLostView() {
+		Image lostImg = new Image("file:img/harry.png");
+		pharaohView.setImage(lostImg);
+		
+		beetleViewList.forEach(beetle -> beetle.stopBeetle());
+	}
+	
+	public void reset() {
+		pane.getChildren().clear();
+		pane.getChildren().add(pharaohView);
+	}
+	
+	public void clickStartButton(Button button, EventHandler<MouseEvent> startGame) {
+		button.setOnMouseClicked(startGame);
 	}
 
 }

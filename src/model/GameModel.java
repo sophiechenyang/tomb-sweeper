@@ -1,24 +1,27 @@
 package model;
 
+import java.util.ArrayList;
+
 import controller.GameController;
 import javafx.scene.Parent;
 
 public class GameModel extends Parent {
-	private static final int ROWS = 3;
-	private static final int COLUMNS = 3;
+	private static final int ROWS = 9;
+	private static final int COLUMNS = 9;
 	private static final int TILE_SIZE = 40;
-	private int beetlesKilled = 0;
-	private int numOfBeetles = 0;
 	private int gamePoints = 0;
 	private TileModel[][] grid = new TileModel[COLUMNS][ROWS] ;
 	private int tilesOpened = 0;
 	private int numOfTiles = ROWS * COLUMNS;
 	private boolean gameWon = false;
-	private boolean gameEnd = false;
+	private boolean gameOver = false;
+	private boolean gameActive = false;
+	private ArrayList<BeetleModel> beetleList = new ArrayList<BeetleModel>();
 	
-	public BeetleModel createBeatle(int x, int y) {
-		BeetleModel beatle = new BeetleModel(x, y);
-		return beatle;
+	public BeetleModel createBeatle() {
+		BeetleModel beetle = new BeetleModel(generateRand(), generateRand());
+		beetleList.add(beetle);
+		return beetle;
 	}
 
 	public TreasureModel createTreasure(int x, int y) {
@@ -32,14 +35,6 @@ public class GameModel extends Parent {
 		return tile;
 	}
 
-	public void generateBeetles(GameController gamecontroller) {
-		while(numOfBeetles < 5) {
-			int x = generateRand();
-			int y = generateRand();
-			gamecontroller.createBeetle(x,y);
-		}
-	}
-
 	public static int getRows() {
 		return ROWS;
 	}
@@ -50,26 +45,6 @@ public class GameModel extends Parent {
 
 	public static int getTileSize() {
 		return TILE_SIZE;
-	}
-
-	public int getBeatleKilled() {
-		return beetlesKilled;
-	}
-
-	public void increaseBeetleCount() {
-		this.beetlesKilled += 1;
-	}
-
-	public int getNumOfBeetles() {
-		return numOfBeetles;
-	}
-
-	public void decreaseNumOfBeetles() {
-		this.numOfBeetles -= 1;
-	}
-
-	public void increaseNumOfBeetles() {
-		this.numOfBeetles += 1;
 	}
 
 	public int getGamePoints() {
@@ -92,9 +67,18 @@ public class GameModel extends Parent {
 		return numOfTiles;
 	}
 	
+	public void reset() {
+		beetleList.clear();
+		gamePoints = 0;
+		tilesOpened = 0;
+		gameWon = false;
+		gameOver = false;
+		gameActive = false;		
+	}
+	
 	// ensure objects do not go out of range
 	public int generateRand() {
-		int random = 2 + (int) (Math.random() * ((8 - 2) + 1));
+		int random = 2 + (int) (Math.random() * ((7 - 2) + 1));
 		return random;
 	}
 
@@ -104,6 +88,30 @@ public class GameModel extends Parent {
 
 	public void setGameWon(boolean gameWon) {
 		this.gameWon = gameWon;
+	}
+
+	public boolean isGameOver() {
+		return gameOver;
+	}
+
+	public void setGameOver(boolean gameOver) {
+		this.gameOver = gameOver;
+	}
+
+	public ArrayList getBeetleList() {
+		return beetleList;
+	}
+
+	public void removeFromBeetleList(BeetleModel beetleModel) {
+		beetleList.remove(beetleModel);
+	}
+
+	public boolean isGameActive() {
+		return gameActive;
+	}
+
+	public void setGameActive(boolean gameActive) {
+		this.gameActive = gameActive;
 	}
 
 }
