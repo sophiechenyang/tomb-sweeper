@@ -4,6 +4,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Parent;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -33,11 +34,11 @@ public class GameView extends Parent{
 		BorderPane root = new BorderPane();
 		
 		setBackground(pane);
-		root.setTop(setHeader());
+		root.setTop(createHeader());
 		root.setCenter(pane);
-		root.setLeft(setLeftPanel());
-		root.setBottom(setBottomPane());
-		root.setRight(setRightPanel());
+		root.setLeft(createLeftPanel());
+		root.setBottom(createBottomPane());
+		root.setRight(createRightPanel());
 		
 		this.getChildren().add(root);
 	}
@@ -67,7 +68,7 @@ public class GameView extends Parent{
 	}
 	
 	// Game Title
-	public StackPane setHeader() {
+	public StackPane createHeader() {
 		StackPane header = new StackPane();
 		
 		Image topPaneImg = new Image("file:img/topPane.png");
@@ -95,7 +96,7 @@ public class GameView extends Parent{
 	}
 	
 	// Instructions panel on the left
-	public VBox setLeftPanel() {
+	public VBox createLeftPanel() {
 		VBox leftcontainer = new VBox();
 				
 		Image leftPaneImg = new Image("file:img/leftPane.png");
@@ -110,7 +111,7 @@ public class GameView extends Parent{
 	}
 	
 	// Instructions panel on the right
-	public VBox setRightPanel() {
+	public VBox createRightPanel() {
 		VBox rightcontainer = new VBox();
 				
 		Image rightPaneImg = new Image("file:img/rightPane.png");
@@ -132,7 +133,7 @@ public class GameView extends Parent{
 	}
 
 	
-	public Pane setBottomPane() {
+	public Pane createBottomPane() {
 		HBox bottomcontainer = new HBox();
 		Image bottomPaneImg = new Image("file:img/bottomPane.png");
 		ImageView bottomPaneView = new ImageView(bottomPaneImg);
@@ -141,6 +142,14 @@ public class GameView extends Parent{
 		
 		bottomcontainer.getChildren().add(bottomPaneView);
 		return bottomcontainer;
+	}
+	
+	public void setWinView() {
+		Image winImg = new Image("file:img/harry.png");
+		ImageView winView = new ImageView(winImg);
+		// Button playAgain = new Button("Play Again");
+		
+		pane.getChildren().addAll(winView);
 	}
 
 }

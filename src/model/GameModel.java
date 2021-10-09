@@ -4,14 +4,18 @@ import controller.GameController;
 import javafx.scene.Parent;
 
 public class GameModel extends Parent {
-	private static final int ROWS = 10;
-	private static final int COLUMNS = 10;
+	private static final int ROWS = 3;
+	private static final int COLUMNS = 3;
 	private static final int TILE_SIZE = 40;
 	private int beetlesKilled = 0;
 	private int numOfBeetles = 0;
 	private int gamePoints = 0;
 	private TileModel[][] grid = new TileModel[COLUMNS][ROWS] ;
-
+	private int tilesOpened = 0;
+	private int numOfTiles = ROWS * COLUMNS;
+	private boolean gameWon = false;
+	private boolean gameEnd = false;
+	
 	public BeetleModel createBeatle(int x, int y) {
 		BeetleModel beatle = new BeetleModel(x, y);
 		return beatle;
@@ -76,10 +80,30 @@ public class GameModel extends Parent {
 		this.gamePoints = this.gamePoints + increment;
 	}
 	
+	public void increaseTileOpenCount() {
+		this.tilesOpened += 1;
+	}
+	
+	public int getTileCount() {
+		return tilesOpened;
+	}
+	
+	public int getNumberOfTiles() {
+		return numOfTiles;
+	}
+	
 	// ensure objects do not go out of range
 	public int generateRand() {
 		int random = 2 + (int) (Math.random() * ((8 - 2) + 1));
 		return random;
+	}
+
+	public boolean isGameWon() {
+		return gameWon;
+	}
+
+	public void setGameWon(boolean gameWon) {
+		this.gameWon = gameWon;
 	}
 
 }

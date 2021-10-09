@@ -19,12 +19,11 @@ public class GameController {
 	}
 
 	public void createTiles() {
-		for (int y = 0; y < gameModel.getRows(); y++) {
-			for (int x = 0; x < gameModel.getColumns(); x++) {
+		for (int y = 0; y < GameModel.getRows(); y++) {
+			for (int x = 0; x < GameModel.getColumns(); x++) {
 				TileModel tile = gameModel.createTile(x, y);
 				TileView tileView = gameView.createTile(tile);
-				TileController tileController = new TileController(tile, tileView,this);
-				
+				TileController tileController = new TileController(tile, tileView,this, gameModel);
 			}
 	}};
 
@@ -55,6 +54,14 @@ public class GameController {
 	public void updateBeetleScore() {
 		gameModel.increaseGamePointsBy(5);
 		gameView.updateScore(gameModel);
+	}
+	
+	public void setGameWon() {
+		if (gameModel.isGameWon() == false) {
+			gameModel.setGameWon(true);
+			gameView.setWinView();
+			System.out.println("congratulations!");
+		}
 	}
 
 }
