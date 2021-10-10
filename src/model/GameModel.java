@@ -77,7 +77,6 @@ public class GameModel extends Parent {
 		gameActive = false;		
 	}
 	
-	// ensure objects do not go out of range
 	public int generateRand() {
 		int random = 2 + (int) (Math.random() * ((7 - 2) + 1));
 		return random;

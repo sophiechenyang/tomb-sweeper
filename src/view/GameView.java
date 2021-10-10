@@ -54,7 +54,6 @@ public class GameView extends Parent{
 	public TileView createTile(TileModel tileModel) {
 		TileView tileView = new TileView(tileModel);
 		pane.getChildren().add(tileView);
-		System.out.println();
 		return tileView;	
 	}
 	

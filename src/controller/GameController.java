@@ -79,7 +79,6 @@ public class GameController {
 
 	class resetGameEvent implements EventHandler<MouseEvent> {
 		public void handle(MouseEvent e) {
-			// System.out.println(gameModel.getTileCount());
 			resetGame();
 		}
 	}
