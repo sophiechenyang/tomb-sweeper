@@ -4,6 +4,9 @@ import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import model.GameModel;
+import scene.WandScene;
+import scene.SnakeScene;
 import controller.GameController;
 
 public class Main extends Application{
@@ -16,8 +19,8 @@ public class Main extends Application{
 
         root.getChildren().add(controller.getGameView());
 
-        primaryStage.setTitle("Tomb Sweeper");
-        primaryStage.setScene(new Scene(root, 1160, 720));
+        primaryStage.setTitle("HP Maze");
+        primaryStage.setScene(new Scene(root, 800, 600));
         primaryStage.show();
         
         // stop application on window close
@@ -32,5 +35,24 @@ public class Main extends Application{
 		launch(args);
 
 	}
-
+	
+	public static void launchSnakeScene(GameModel gameModel) {
+		SnakeScene snakeView = new SnakeScene(gameModel);
+		Scene snakeScene = new Scene(snakeView.makeSnakeScene(), 800, 600);
+		Stage snakeStage = new Stage();
+		snakeStage.setTitle("Fight Snake");
+		snakeStage.setScene(snakeScene);
+		snakeStage.show();
+		
+	}
+	
+	public static void launchWandScene(GameModel gameModel) {
+		WandScene wand = new WandScene(gameModel);
+		Scene wandScene = new Scene(wand.makeWandScene(), 800, 600);
+		Stage wandStage = new Stage();
+		wandStage.setTitle("Retrieve Elder Wand");
+		wandStage.setScene(wandScene);
+		wandStage.show();
+		
+	}
 }

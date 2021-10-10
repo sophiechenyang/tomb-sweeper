@@ -44,7 +44,7 @@ public class TreasureView extends ImageView {
 	
 	public void collectTreasure() {
 		
-		int newX = (GameModel.getColumns() * tileSize) / 2;
+		int newX = GameModel.getColumns() * tileSize;
 		
 		TranslateTransition moveTreasure = new TranslateTransition(Duration.millis(500), this);
 		moveTreasure.setFromY(currentTreasureY);

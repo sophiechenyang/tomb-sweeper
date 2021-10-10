@@ -42,7 +42,7 @@ public class BeetleView extends ImageView {
 
 		int beetleX = beetle.getX();
 		int beetleY = beetle.getY();
-		int translate = 40;
+		int translate = 45;
 		int increment = 35;
 		int currentBeetleX = 7 + beetleX  * translate;
 		int currentBeetleY = 7 + beetleY * translate;

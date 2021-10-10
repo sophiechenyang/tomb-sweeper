@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import application.Main;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
@@ -11,29 +12,46 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.BeetleModel;
 import model.GameModel;
+import model.PlayerModel;
 import model.TileModel;
 import model.TreasureModel;
 import view.BeetleView;
 import view.GameView;
+import view.PlayerView;
 import view.TileView;
 import view.TreasureView;
 
 public class GameController {
 	private GameView gameView = new GameView();
 	private GameModel gameModel = new GameModel();
+	private PlayerModel player;
+	private PlayerView playerView;
+	private int[][] maze = gameModel.getMaze();
 	Timer timer;
+	private int tileSize = gameModel.getTileSize();
 
 	public GameController() {
-		createTiles();
-		gameView.clickResetButton(gameView.resetButton, new resetGameEvent());
+		startGame();
+		
 		gameView.setKeyPressHandler(new activateAmulet());
-		gameView.setKeyReleaseHandler(new deactivateAmulet());
 	}
 
 	public void startGame() {
 		timer = new Timer();
-		timer.schedule(new RemindTask(), 0, 8000);
+		//timer.schedule(new RemindTask(), 0, 8000);
+		//timer.schedule(new CheckWin(), 0, 100);
 		gameModel.setGameActive(true);
+
+		for (int y = 0; y < GameModel.getRows(); y++) {
+			for (int x = 0; x < GameModel.getColumns(); x++) {
+				TileModel tile = gameModel.createTile(x, y);
+				TileView tileView = gameView.createTile(tile, maze[y][x]);
+				if (tile.isHasTreasure() && maze[y][x] == 0)
+					createTreasure(x, y);
+			}
+		}
+
+		createPlayer();
 
 	}
 
@@ -47,23 +65,28 @@ public class GameController {
 
 				if (beetleCount < 20) {
 					createBeetle();
-					createBeetle();
 				} else {
 					setGameOver();
 				}
 			});
 		}
 	}
+	
+	class CheckWin extends TimerTask {
 
-	public void createTiles() {
-		for (int y = 0; y < GameModel.getRows(); y++) {
-			for (int x = 0; x < GameModel.getColumns(); x++) {
-				TileModel tile = gameModel.createTile(x, y);
-				TileView tileView = gameView.createTile(tile);
-				TileController tileController = new TileController(tile, tileView, this, gameModel);
-			}
+		public void run() {
+			Platform.runLater(() -> {
+				
+				System.out.println("player location is X:" + player.getX() + "Y: " + player.getY());
+				
+			});
 		}
-	};
+	}
+
+	public void createPlayer() {
+		player = new PlayerModel(2);
+		playerView = gameView.createPlayer(player);
+	}
 
 	public void createBeetle() {
 		BeetleModel beetle = gameModel.createBeatle();
@@ -79,37 +102,59 @@ public class GameController {
 
 	class resetGameEvent implements EventHandler<MouseEvent> {
 		public void handle(MouseEvent e) {
-			// System.out.println(gameModel.getTileCount());
 			resetGame();
+			e.consume();
 		}
 	}
-	
+
 	class activateAmulet implements EventHandler<KeyEvent> {
 		@Override
 		public void handle(KeyEvent event) {
 			KeyCode code = event.getCode();
-			if (code == KeyCode.A) {
-				gameModel.setAmuletActivated(true);
-				System.out.println("A key is detected");
-				System.out.println(gameModel.isAmuletActivated());
+
+			int currentPlayerX = player.getX();
+			int currentPlayerY = player.getY();
+
+			if (code == KeyCode.RIGHT && maze[currentPlayerY][currentPlayerX + 1] != 1) {
+
+				player.setX(currentPlayerX + 1);
+				playerView.moveX(player.getX() * tileSize);
+
+			} else if (code == KeyCode.LEFT && maze[currentPlayerY][currentPlayerX - 1] != 1) {
+				player.setX(currentPlayerX - 1);
+				playerView.moveX(player.getX() * tileSize);
+
+			} else if (code == KeyCode.UP && maze[currentPlayerY - 1][currentPlayerX] != 1) {
+				player.setY(currentPlayerY - 1);
+				playerView.moveY(player.getY() * tileSize);
+
+			} else if (code == KeyCode.DOWN && maze[currentPlayerY + 1][currentPlayerX] != 1) {
+				player.setY(currentPlayerY + 1);
+				playerView.moveY(player.getY() * tileSize);
+
+			} else {
+				return;
+			}
+			
+			if (player.getX() == 1 && player.getY() == 7) {
+				gameModel.setGameWon(true);
+				System.out.println("Game won:" + gameModel.isGameWon());
+			}
+			
+			if (maze[player.getY()][player.getX()] == 3 && gameModel.isSnakeDefeated() ==false ) {
+				Main.launchSnakeScene(gameModel);
+			} 
+			
+			if (maze[player.getY()][player.getX()] == 4 && gameModel.isWandRetrieved() ==false ) {
+				Main.launchWandScene(gameModel);
 			}
 		}
 	}
 
-	class deactivateAmulet implements EventHandler<KeyEvent> {
-		@Override
-		public void handle(KeyEvent event) {
-			KeyCode code = event.getCode();
-			if (code == KeyCode.A) {
-				gameModel.setAmuletActivated(false);
-				System.out.println("A key is released");
-				System.out.println(gameModel.isAmuletActivated());
-			}
-		}
-	}
 	public GameView getGameView() {
 		return gameView;
 	}
+
 
 	public void setGameView(GameView gameView) {
 		this.gameView = gameView;
@@ -142,7 +187,7 @@ public class GameController {
 		timer.cancel();
 		gameView.reset();
 		gameModel.reset();
-		createTiles();
+		startGame();
 	}
 
 }

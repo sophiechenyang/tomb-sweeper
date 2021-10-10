@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import model.BeetleModel;
 import model.GameModel;
+import model.PlayerModel;
 import model.TileModel;
 import model.TreasureModel;
 
@@ -33,29 +34,28 @@ public class GameView extends Parent{
 	Text gameScore = new Text("0");
 	Text jewelScore = new Text("0");
 	Pane pane = new Pane();
-	Image pharaohImg = new Image("file:img/pharaoh.png");
-	ImageView pharaohView = new ImageView(pharaohImg);
 	private ArrayList<BeetleView> beetleViewList = new ArrayList<BeetleView>();
-	public Button resetButton = new Button("Restart");
 	
 	public GameView() {
 		BorderPane root = new BorderPane();
-		
-		setBackground(pane);
+
 		root.setTop(createHeader());
-		root.setCenter(createGamePane());
-		root.setLeft(createLeftPanel());
-		root.setBottom(createBottomPane());
+		root.setCenter(pane);
 		root.setRight(createRightPanel());
 		
 		this.getChildren().add(root);
 	}
 	
-	public TileView createTile(TileModel tileModel) {
-		TileView tileView = new TileView(tileModel);
+	public TileView createTile(TileModel tileModel, int tileType) {
+		TileView tileView = new TileView(tileModel, tileType);
 		pane.getChildren().add(tileView);
-		System.out.println();
 		return tileView;	
+	}
+	
+	public PlayerView createPlayer(PlayerModel player) {
+		PlayerView playerView = new PlayerView(player);	
+		pane.getChildren().addAll(playerView);
+		return playerView;
 	}
 	
 	public BeetleView createBeatle(BeetleModel beetlemodel, GameModel gameModel) {
@@ -79,47 +79,16 @@ public class GameView extends Parent{
 	public StackPane createHeader() {
 		StackPane header = new StackPane();
 		
-		Image topPaneImg = new Image("file:img/topPane.png");
+		Image topPaneImg = new Image("file:img/title.png");
 		ImageView topPaneView = new ImageView(topPaneImg);
-		topPaneView.setFitWidth(1160);
-		topPaneView.setFitHeight(180);
-		
-		VBox textBox = new VBox();
-		textBox.setAlignment(Pos.CENTER);
-		
-		Text title = new Text("Pharaoh's Treasures");
-		title.setFill(Color.GOLD);
-		title.setFont(Font.font(24));
-	
-		gameScore.setFill(Color.GOLD);
-		gameScore.setFont(Font.font(30));
-		
-		textBox.getChildren().addAll(title, gameScore);
+		topPaneView.setFitWidth(800);
+		topPaneView.setFitHeight(100);
 		
 		//header.getStyleClass().add("header");
 		
-		header.getChildren().addAll(topPaneView, textBox);
+		header.getChildren().addAll(topPaneView);
 		return header;
 		
-	}
-	
-	public VBox createGamePane() {
-		VBox middleContainer = new VBox();
-
-		Text testText = new Text("Game is Started");
-		Group scores = new Group ();
-		scores.getChildren().addAll(gameScore, jewelScore);
-		
-		
-		BorderPane gameDisplay = new BorderPane();
-		gameDisplay.setMinSize(200, 60);
-		gameDisplay.setLeft(jewelScore);
-		gameDisplay.setCenter(gameScore);
-		gameDisplay.setRight(resetButton);
-		
-		
-		middleContainer.getChildren().addAll(gameDisplay,pane);
-		return middleContainer;
 	}
 	
 	public StackPane createLeftPanel() {
@@ -143,25 +112,10 @@ public class GameView extends Parent{
 
 	public VBox createRightPanel() {
 		VBox rightcontainer = new VBox();
-				
-		Image rightPaneImg = new Image("file:img/rightPane.png");
-		ImageView rightPaneView = new ImageView(rightPaneImg);
 		
-		
-		rightPaneView.setFitWidth(400);
-		rightPaneView.setFitHeight(460);
-		
-		rightcontainer.getChildren().add(rightPaneView);
+		rightcontainer.getChildren().addAll(gameScore, jewelScore);
 		return rightcontainer;
 	}
-	
-	void setBackground(Pane pane) {
-		pharaohView.setFitWidth(360);
-		pharaohView.setFitHeight(360);
-		pane.getChildren().add(pharaohView);
-
-	}
-
 	
 	public Pane createBottomPane() {
 		HBox bottomcontainer = new HBox();
@@ -184,15 +138,12 @@ public class GameView extends Parent{
 	
 	public void setLostView() {
 		Image lostImg = new Image("file:img/harry.png");
-		pharaohView.setImage(lostImg);
 		
 		beetleViewList.forEach(beetle -> beetle.stopBeetle());
 	}
 	
 	public void reset() {
 		pane.getChildren().clear();
-		pharaohView.setImage(pharaohImg);
-		pane.getChildren().add(pharaohView);
 		gameScore.setText("0");
 		jewelScore.setText("0");
 	}

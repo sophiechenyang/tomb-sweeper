@@ -46,12 +46,8 @@ public class BeetleController {
 
 		@Override
 		public void handle(MouseEvent e) {
-			
-			
-			if (gameModel.isAmuletActivated() == false) {
 				beetleView.stopBeetle();
 				gameController.setGameOver();
-			}
 
 			//System.out.println(e);
 			
