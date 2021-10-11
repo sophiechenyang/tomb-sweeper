@@ -25,11 +25,13 @@ public class TreasureController {
 	class detectDrag implements EventHandler<MouseEvent> {
 		@Override
 		public void handle(MouseEvent e) {
-			if (gameModel.isGameActive() == true) {
+			if (gameModel.isGameActive()) {
 				treasureView.setCursor(Cursor.CLOSED_HAND);
 				treasureView.collectTreasure();
 				gameModel.increaseGamePointsBy(50);
+				gameModel.increaseJewelCount();
 				gameView.updateScore(gameModel);
+				gameView.updateJewelCount(gameModel);
 			}
 		}
 	}

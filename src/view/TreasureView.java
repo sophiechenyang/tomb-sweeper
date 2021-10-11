@@ -44,26 +44,26 @@ public class TreasureView extends ImageView {
 	
 	public void collectTreasure() {
 		
-		int newX = (GameModel.getColumns() * tileSize) / 2;
-		
 		TranslateTransition moveTreasure = new TranslateTransition(Duration.millis(500), this);
-		moveTreasure.setFromY(currentTreasureY);
-		moveTreasure.setToY(0);
-		moveTreasure.setFromX(currentTreasureX);
-		moveTreasure.setToX(newX);
+		moveTreasure.setToY(-50);
+		moveTreasure.setToX(10);
 		moveTreasure.setCycleCount(1);
 		
 		FadeTransition fadeOut = new FadeTransition(Duration.millis(500), this);
 		fadeOut.setFromValue(1.0f);
 		fadeOut.setToValue(0.0f);
 		fadeOut.setCycleCount(1);
-		
+		fadeOut.setOnFinished(e -> removeImage());
 		ParallelTransition collectJewel = new ParallelTransition(
 			moveTreasure, fadeOut
 		);
 		
-		
 		collectJewel.play();
+		
+	}
+
+	private void removeImage() {
+		this.setImage(null);
 	}
 
 }

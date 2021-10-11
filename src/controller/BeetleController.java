@@ -3,6 +3,7 @@ package controller;
 import view.BeetleView;
 import view.GameView;
 import javafx.event.EventHandler;
+import javafx.scene.Cursor;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import model.BeetleModel;
@@ -12,12 +13,14 @@ public class BeetleController {
 	private BeetleView beetleView;
 	private BeetleModel beetleModel;
 	private GameModel gameModel;
+	private GameView gameView;
 	private GameController gameController;
 
-	public BeetleController(BeetleModel beetleModel, BeetleView beetleView, GameModel gameModel, GameController gameController) {
+	public BeetleController(BeetleModel beetleModel, BeetleView beetleView, GameModel gameModel, GameController gameController, GameView gameView) {
 		this.beetleView = beetleView;
 		this.beetleModel = beetleModel;
 		this.gameModel = gameModel;
+		this.gameView = gameView;
 		this.gameController = gameController;
 		this.beetleView.setPlayerHandler(new clickBeetle());
 		this.beetleView.setHoverHandler(new hoverBeetle());
@@ -29,7 +32,6 @@ public class BeetleController {
 		@Override
 		public void handle(MouseEvent e) {
 			if (e.getClickCount() > 2) {
-				//System.out.println(e);
 				
 				if (beetleModel.isDead())
 					return;
@@ -47,25 +49,25 @@ public class BeetleController {
 		@Override
 		public void handle(MouseEvent e) {
 			
-			
-			if (gameModel.isAmuletActivated() == false) {
+			if (!gameModel.isAmuletActivated() && !beetleModel.isDead()) {
 				beetleView.stopBeetle();
 				gameController.setGameOver();
+			} else {
+				beetleView.setCursor(Cursor.CROSSHAIR);
 			}
-
-			//System.out.println(e);
 			
 		}
 	}
 	
 	private void killBeetle() {
-		//beetleView.setImage(null);
+
 		
 		if (gameModel.isGameActive()) {
-			beetleView.fadeBeetle(this.beetleView);
+			beetleView.collectBeetle();
 			beetleModel.setDead(true);
 			gameModel.removeFromBeetleList(beetleModel);
 			gameController.updateBeetleScore();
+			gameView.updateBeetleCount(gameModel);
 		}
 	}
 	

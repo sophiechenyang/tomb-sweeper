@@ -1,14 +1,21 @@
 package controller;
 
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javafx.application.Platform;
 import javafx.event.EventHandler;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.media.AudioClip;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import model.BeetleModel;
 import model.GameModel;
 import model.TileModel;
@@ -22,21 +29,31 @@ public class GameController {
 	private GameView gameView = new GameView();
 	private GameModel gameModel = new GameModel();
 	Timer timer;
+	File f;
+	Media m;
+	MediaPlayer mp;
 
-	public GameController() {
+	public GameController() throws MalformedURLException {
 		createTiles();
-		gameView.clickResetButton(gameView.resetButton, new resetGameEvent());
+		gameView.setInstructions();
+		gameView.clickResetButton(gameView.getResetView(), new resetGameEvent());
+		gameView.clickInstructionBttn(gameView.getInstructBttnView(), new toggleInstruction());
 		gameView.setKeyPressHandler(new activateAmulet());
 		gameView.setKeyReleaseHandler(new deactivateAmulet());
+		gameView.clickInstruction(gameView.getInstructView(), new hideInstruction());
+        f = new File("src/Osiris.mp3");
+        m = new Media(f.toURI().toString());
+        mp = new MediaPlayer(m);
+    	mp.play();
 	}
-
+	
 	public void startGame() {
 		timer = new Timer();
 		timer.schedule(new RemindTask(), 0, 8000);
 		gameModel.setGameActive(true);
-
+	
 	}
-
+	
 	class RemindTask extends TimerTask {
 
 		ArrayList<BeetleModel> beetleList = gameModel.getBeetleList();
@@ -45,7 +62,7 @@ public class GameController {
 			Platform.runLater(() -> {
 				int beetleCount = beetleList.size();
 
-				if (beetleCount < 20) {
+				if (beetleCount < gameModel.getMaximumBeetle()) {
 					createBeetle();
 					createBeetle();
 				} else {
@@ -68,7 +85,8 @@ public class GameController {
 	public void createBeetle() {
 		BeetleModel beetle = gameModel.createBeatle();
 		BeetleView beetleView = gameView.createBeatle(beetle, gameModel);
-		BeetleController beetleController = new BeetleController(beetle, beetleView, gameModel, this);
+		BeetleController beetleController = new BeetleController(beetle, beetleView, gameModel, this, gameView);
+		gameView.updateBeetleCount(gameModel);
 	}
 
 	void createTreasure(int x, int y) {
@@ -79,7 +97,34 @@ public class GameController {
 
 	class resetGameEvent implements EventHandler<MouseEvent> {
 		public void handle(MouseEvent e) {
-			resetGame();
+
+			if(gameModel.isGameActive() || gameModel.isGameOver() || gameModel.isGameWon() ) {
+				resetGame();
+			}	
+		}
+	}
+	
+	class hideInstruction implements EventHandler<MouseEvent>{
+		public void handle(MouseEvent e) {
+			gameView.removeInstructions();
+			gameView.getInstructBttnView().setImage(gameView.getEyeInactiveImg());
+			gameModel.setShowingInstruction(false);
+		}
+	}
+	
+	class toggleInstruction implements EventHandler<MouseEvent>{
+		public void handle(MouseEvent e) {
+			if (gameModel.isShowingInstruction()) {
+				gameView.removeInstructions();
+				gameView.getInstructBttnView().setImage(gameView.getEyeInactiveImg());
+				gameModel.setShowingInstruction(false);
+			} else {
+				gameView.showInstructions();
+				gameView.getInstructBttnView().setImage(gameView.getEyeActiveImg());
+				gameModel.setShowingInstruction(true);
+			}
+			
+
 		}
 	}
 	
@@ -89,8 +134,7 @@ public class GameController {
 			KeyCode code = event.getCode();
 			if (code == KeyCode.A) {
 				gameModel.setAmuletActivated(true);
-				System.out.println("A key is detected");
-				System.out.println(gameModel.isAmuletActivated());
+				gameView.getAmuletView().setImage(gameView.getAmuletActiveImg());
 			}
 		}
 	}
@@ -100,9 +144,8 @@ public class GameController {
 		public void handle(KeyEvent event) {
 			KeyCode code = event.getCode();
 			if (code == KeyCode.A) {
-				gameModel.setAmuletActivated(false);
-				System.out.println("A key is released");
-				System.out.println(gameModel.isAmuletActivated());
+				gameModel.setAmuletActivated(false);			
+				gameView.getAmuletView().setImage(gameView.getAmuletInactiveImg());
 			}
 		}
 	}

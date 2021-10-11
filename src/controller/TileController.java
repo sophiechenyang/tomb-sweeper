@@ -27,26 +27,18 @@ public class TileController {
 			if (!gameModel.isGameActive() && !gameModel.isGameOver())
 				gameController.startGame();
 			
-			if (tileModel.isHasTreasure() == true && !gameModel.isGameOver()) {
+			if (tileModel.isHasTreasure() == true && !gameModel.isGameOver() && !gameModel.isAmuletActivated()) {
 				gameController.createTreasure(tileModel.getX(), tileModel.getY());
 			}
 			
-			if (gameModel.isGameActive()) {
+			if (gameModel.isGameActive() && !gameModel.isAmuletActivated()) {
 				tileView.setImage(null);
 				gameModel.increaseTileOpenCount();
 			}
-		
-			
-			System.out.println("Tiles opened: " + gameModel.getTileCount());
-			System.out.println("Total tiles: " + gameModel.getNumberOfTiles());
 			
 			if (gameModel.getTileCount() == gameModel.getNumberOfTiles()) {
 				gameController.setGameWon();
 			}
-			
-			//System.out.println("is Game Active: " + gameModel.isGameActive());
-			//System.out.println("is Game Over: " + gameModel.isGameOver());
-
 
 		}
 	}

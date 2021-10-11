@@ -9,6 +9,7 @@ public class GameModel extends Parent {
 	private static final int ROWS = 10;
 	private static final int COLUMNS = 9;
 	private static final int TILE_SIZE = 40;
+	private static final int MAXIMUM_BEETLE = 20;
 	private int gamePoints = 0;
 	private TileModel[][] grid = new TileModel[COLUMNS][ROWS] ;
 	private int tilesOpened = 0;
@@ -17,7 +18,17 @@ public class GameModel extends Parent {
 	private boolean gameOver = false;
 	private boolean gameActive = false;
 	private ArrayList<BeetleModel> beetleList = new ArrayList<BeetleModel>();
+	private int jewelCount = 0;
 	private boolean amuletActivated = false; 
+	private boolean showingInstruction = true;
+	
+	// images
+	private static final String ACTIVE_EYE_URL = "file:img/eye_active.png";
+	private static final String INACTIVE_EYE_URL = "file:img/eye_inactive.png";
+	private static final String INSTRUCTION_URL = "file:img/instructions.png";
+	private static final String AMULET_INACTIVE_URL = "file:img/amulet_inactive.png";
+	private static final String AMULET_ACTIVE_URL = "file:img/amulet_active.png";
+	private static final String SCARAB_INACTIVE_URL = "file:img/scarab_inactive.png";
 	
 	public BeetleModel createBeatle() {
 		BeetleModel beetle = new BeetleModel(generateRand(), generateRand());
@@ -72,9 +83,10 @@ public class GameModel extends Parent {
 		beetleList.clear();
 		gamePoints = 0;
 		tilesOpened = 0;
+		jewelCount = 0;
 		gameWon = false;
 		gameOver = false;
-		gameActive = false;		
+		gameActive = false;	
 	}
 	
 	public int generateRand() {
@@ -120,6 +132,50 @@ public class GameModel extends Parent {
 
 	public void setAmuletActivated(boolean amuletActivated) {
 		this.amuletActivated = amuletActivated;
+	}
+
+	public int getJewelCount() {
+		return jewelCount;
+	}
+
+	public void increaseJewelCount() {
+		jewelCount += 1;
+	}
+
+	public static String getActiveEyeUrl() {
+		return ACTIVE_EYE_URL;
+	}
+
+	public static String getInactiveEyeUrl() {
+		return INACTIVE_EYE_URL;
+	}
+
+	public boolean isShowingInstruction() {
+		return showingInstruction;
+	}
+
+	public void setShowingInstruction(boolean showingInstruction) {
+		this.showingInstruction = showingInstruction;
+	}
+
+	public static String getInstructionUrl() {
+		return INSTRUCTION_URL;
+	}
+
+	public static int getMaximumBeetle() {
+		return MAXIMUM_BEETLE;
+	}
+
+	public static String getAmuletInactiveUrl() {
+		return AMULET_INACTIVE_URL;
+	}
+
+	public static String getScarabInactiveUrl() {
+		return SCARAB_INACTIVE_URL;
+	}
+
+	public static String getAmuletActiveUrl() {
+		return AMULET_ACTIVE_URL;
 	}
 
 }

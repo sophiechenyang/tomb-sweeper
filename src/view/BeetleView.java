@@ -82,19 +82,30 @@ public class BeetleView extends ImageView {
 
 	}
 	
+	public void collectBeetle() {
+		
+		TranslateTransition moveBeetle = new TranslateTransition(Duration.millis(500), this);
+		moveBeetle.setToY(400);
+		//moveBeetle.setToX(10);
+		moveBeetle.setCycleCount(1);
+		
+		FadeTransition fadeOut = new FadeTransition(Duration.millis(500), this);
+		fadeOut.setFromValue(1.0f);
+		fadeOut.setToValue(0.0f);
+		fadeOut.setCycleCount(1);
+		
+		ParallelTransition collectBeetle = new ParallelTransition(
+			moveBeetle, fadeOut
+		);
+		
+		collectBeetle.setCycleCount(1);
+		collectBeetle.play();
+	}
+	
 	public void stopBeetle() {
 		sequentialTransition.stop();
 	}
 	
-	public void fadeBeetle(BeetleView beetleview) {
-		FadeTransition fadeOut = new FadeTransition(Duration.millis(1000), beetleview);
-		fadeOut.setFromValue(1.0f);
-		fadeOut.setToValue(0.0f);
-		fadeOut.setCycleCount(1);
-		fadeOut.setAutoReverse(false);
-		fadeOut.play();
-		};
-
 	public void setPlayerHandler(EventHandler<MouseEvent> listenForClick) {
 		this.setOnMouseClicked(listenForClick);
 	}
