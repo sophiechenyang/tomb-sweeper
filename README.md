@@ -24,15 +24,10 @@ When the amulet is activated, the amulet symbol on top becomes highlighted and t
 
 
 ### Screens
-Instruction screen
 
 <img width="660" alt="instructions" src="https://user-images.githubusercontent.com/80676658/139555421-beed1171-22ff-4a88-b6a9-3b372d140f8c.png">
 
-Game over view
-
 <img width="660" alt="game over" src="https://user-images.githubusercontent.com/80676658/139555424-29891a14-4458-4f1e-8d14-01bf3eb15711.png">
-
-Game won view
 
 <img width="660" alt="game won" src="https://user-images.githubusercontent.com/80676658/139555428-8159e18a-2eec-4153-8a20-b6b3b23ea525.png">
 
