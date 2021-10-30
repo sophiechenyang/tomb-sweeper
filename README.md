@@ -12,13 +12,11 @@ The code makes use of JavaFX library and is structured according to the Model Vi
 * Click to open a cell 
 * Drag the gem to collect it
 * Avoid touching the scarab beetles that are crawling around the tomb, or the game ends. 
+* Clear all cells to win.
 
-A special amulet offers protection against the scarab beetles. 
-* To activate the amulet, the player has to hold down the A key. 
+A special amulet offers protection against the scarab beetles. To activate the amulet, the player has to hold down the A key. 
 
 When the amulet is activated, the amulet symbol on top becomes highlighted and the cursor changes to a crosshair when the cursor hovers over it. In this mode, the player can right-click to stop the beetle from scuttering around, and then click on the beetle a few times to collect it. However, they will not be able to open any cells whilst using the amulet. 
-
-* Clear all cells to win.
 
 ![gameplay](https://user-images.githubusercontent.com/80676658/139555731-7509d726-f366-4a35-b2f2-fc2cc932437b.gif)
 
